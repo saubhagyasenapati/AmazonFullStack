@@ -10,15 +10,25 @@ const errorMiddleware = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
-dotenv.config({ path: "backend/config/config.env" });
+dotenv.config({ path: "config/config.env" });
+const path=require("path")
 
 //Handling Uncaught exception
+
 process.on("uncaughtException", (err) => {
   console.log(`Error:${err.message}`);
   console.log("Shutting down the server due to Uncaught exception");
   process.exit(1);
 });
 
+app.use(express.static(path.join(__dirname,"./client/build")))
+app.get("*",(req,res)=>{
+  res.sendFile(path.join(__dirname,"./client/build/index.html"),
+  function(err){
+    res.status(500).send(err);
+  }
+  );
+})
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(fileUpload());
 app.use(express.json());
@@ -29,15 +39,13 @@ app.use("/api/v1", productRoute);
 app.use("/api/auth", userRoute);
 app.use("/api/v1", orderRoute);
 app.use("/api/v1", paymentRoute);
+
 //MiddleWare for error
 app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
   console.log(`Server is Working on http://localhost:${process.env.PORT}`);
 });
-app.use(express.static(path.join(___dirname,"./client/build")))
-app.get("*",(req,res)=>{
-  res.sendFile(path.resolve(__dirname,"./client/build/index.html"));
-})
+
 
 //Unhandled Promise Rejection
 

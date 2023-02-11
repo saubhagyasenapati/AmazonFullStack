@@ -50,12 +50,12 @@ function App() {
     getStripeApiKey();
   }, []);
 
-  window.addEventListener("contextmenu",(e)=>e.preventDefault())
+  // window.addEventListener("contextmenu",(e)=>e.preventDefault())
   return (
     <>
       <Router>
-        {isAuthenticated && <NavbarLogin user={user} />}
-        {!isAuthenticated && <Navbar />}
+        {/* {isAuthenticated && <NavbarLogin user={user} />} */}
+ <Navbar />
         <Routes>
           <Route path ="*" element={<NotFound/>}/>
           <Route exact path="/" element={<Home />}></Route>

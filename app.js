@@ -18,6 +18,7 @@ process.on("uncaughtException", (err) => {
   console.log("Shutting down the server due to Uncaught exception");
   process.exit(1);
 });
+
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(fileUpload());
 app.use(express.json());
@@ -33,6 +34,10 @@ app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
   console.log(`Server is Working on http://localhost:${process.env.PORT}`);
 });
+app.use(express.static(path.join(___dirname,"./client/build")))
+app.get("*",(req,res)=>{
+  res.sendFile(path.resolve(__dirname,"./client/build/index.html"));
+})
 
 //Unhandled Promise Rejection
 
